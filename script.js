@@ -36,7 +36,45 @@ function GameBoard() {
     console.log(boardWithCellValues)
   }
 
-  return { getBoard, placeMarker, printBoard }
+  const transposeBoard = (board) => {
+    return board.map((_, index) => board.map((row) => row[index]))
+  }
+
+  const checkBoard = () => {
+    //if row[i] column0,1,2 is the same value, player win (horizontal)
+    const isHorizontalWinner = (player, board) => {
+      return board.some((moves) =>
+        moves.every((move) => move.getValue() === player)
+      )
+    }
+    //if column[i] row[0] and [1] and [2] are same value, win (vertical)
+    const isVerticalWinner = (player, board) => {
+      return transposeBoard(board).some((moves) =>
+        moves.every((move) => move.getValue() === player)
+      )
+    }
+    //if  row=0 column=0 and row=1 column=1 and row=2 column=2 are same, player win (diagonal)
+    //if row=0 column =2 and row=1 column=1 and row=2 column=0 are same, player win (diagonal)
+    const isDiagonalWinner = (player, board) => {
+      if (
+        (board[0][0].getValue() === player &&
+          board[1][1].getValue() === player &&
+          board[2][2].getValue() === player) ||
+        (board[0][2].getValue() === player &&
+          board[1][1].getValue() === player &&
+          board[2][0].getValue() === player)
+      )
+        return true
+      else {
+        return false
+      }
+    }
+
+    //if all cells are full and no winner, stalemate
+    return { isHorizontalWinner, isVerticalWinner, isDiagonalWinner }
+  }
+
+  return { getBoard, placeMarker, printBoard, checkBoard }
 }
 
 //return methods to be used
@@ -100,6 +138,7 @@ function GameController(
     board.printBoard()
     console.log(`${getActivePlayer().name}'s turn`)
   }
+
   //play round,
 
   const playRound = (row, column) => {
@@ -110,9 +149,25 @@ function GameController(
     )
     //let player add marker
     board.placeMarker(row, column, getActivePlayer().marker)
-    //check for winner
 
-    //switch who's turn it is
+    //check for winner
+    console.log(
+      board
+        .checkBoard()
+        .isHorizontalWinner(getActivePlayer().marker, board.getBoard())
+    )
+    console.log(
+      board
+        .checkBoard()
+        .isVerticalWinner(getActivePlayer().marker, board.getBoard())
+    )
+    console.log(
+      board
+        .checkBoard()
+        .isDiagonalWinner(getActivePlayer().marker, board.getBoard())
+    )
+
+    //switch who's turn it is if no winner
     switchPlayerTurn()
     //display whose turn it is
     printNewRound()
@@ -120,6 +175,7 @@ function GameController(
 
   //initalize game message
   printNewRound()
+  console.log(board.checkBoard())
 
   //gamecontroller returns ability to play round and see who the active player is
   return {
