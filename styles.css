@@ -59,3 +59,20 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+.format {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header {
+  background-color: rgb(163, 163, 189);
+}
+.main {
+  background-color: rgb(223, 191, 191);
+  min-height: 90vh;
+}
+.footer {
+  background-color: rgb(199, 199, 159);
+}
