@@ -155,14 +155,13 @@ function GameController(
       return isHorizontalWinner() || isDiagonalWinner() || isVerticalWinner()
     }
     //check for win
-    //print for console rn
-    console.log(checkWin(getActivePlayer().marker, board.getBoard()))
-    console.log(round)
     //if all cells are full and no winner, stalemate
     const checkStalemate = (round, winStatus) => {
       return round === 9 && winStatus == false ? true : false
     }
-    if (
+    if (checkWin(getActivePlayer().marker, board.getBoard())) {
+      console.log(`${getActivePlayer().name} wins!`)
+    } else if (
       checkStalemate(
         round,
         checkWin(getActivePlayer().marker, board.getBoard())
