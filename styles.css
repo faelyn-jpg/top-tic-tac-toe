@@ -70,9 +70,28 @@ h6 {
   background-color: rgb(163, 163, 189);
 }
 .main {
-  background-color: rgb(223, 191, 191);
-  min-height: 90vh;
 }
 .footer {
   background-color: rgb(199, 199, 159);
+}
+
+.container {
+  background-color: rgb(223, 191, 191);
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.turn {
+  background-color: azure;
+  display: flex;
+  min-height: 100px;
+  min-width: 200px;
+}
+.board {
+  background-color: bisque;
+  display: flex;
+  min-height: 200px;
+  min-width: 300px;
 }
