@@ -190,6 +190,26 @@ function GameController(
 //screen controller for DOM control
 function ScreenController() {
   const game = GameController()
+  const playerTurnDiv = document.querySelector('.turn')
+  const boardDiv = document.querySelector('.board')
+
+  const updateScreen = () => {
+    //clear board
+    boardDiv.textContent = ''
+
+    //get newest version of board and player
+
+    //display player's turn
+
+    //render board squares/cells
+    //data attribute to identify columns/rows
+  }
+
+  function clickHandlerBoard(e) {
+    //make sure column/row is clicked and not space between
+  }
+
+  //inital render
 }
 
-//set game to game controller
+//call screen controller
