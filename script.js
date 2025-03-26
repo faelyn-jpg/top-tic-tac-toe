@@ -183,6 +183,7 @@ function GameController(
   return {
     playRound,
     getActivePlayer,
+    getBoard: board.getBoard,
   }
 }
 
