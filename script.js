@@ -72,6 +72,9 @@ function GameController(
   //define board
   const board = GameBoard()
 
+  //set round
+  let round = 0
+
   //player objects in array
   const players = [
     {
@@ -104,6 +107,7 @@ function GameController(
   //play round,
 
   const playRound = (row, column) => {
+    round++
     console.log(
       `Placing ${
         getActivePlayer().name
@@ -112,8 +116,8 @@ function GameController(
     //let player add marker
     board.placeMarker(row, column, getActivePlayer().marker)
 
-    //check for winner
-    const checkBoard = (player, board) => {
+    //define check for winner
+    const checkWin = (player, board) => {
       //transpose board for vertical check
       const transposeBoard = (board) => {
         return board.map((_, index) => board.map((row) => row[index]))
@@ -147,15 +151,21 @@ function GameController(
         }
       }
 
-      //if all cells are full and no winner, stalemate
-
+      //return if win is true or false
       return isHorizontalWinner() || isDiagonalWinner() || isVerticalWinner()
     }
-
+    //check for win
     //print for console rn
-    console.log(checkBoard(getActivePlayer().marker, board.getBoard()))
+    console.log(checkWin(getActivePlayer().marker, board.getBoard()))
+    //if all cells are full and no winner, stalemate
+    if (
+      checkWin(getActivePlayer().marker, board.getBoard()) === false &&
+      round === 9
+    ) {
+      console.log('Stalemate!')
+    }
 
-    //switch who's turn it is if no winner
+    //switch who's turn it is if no winner & no stalemate
     switchPlayerTurn()
     //display whose turn it is
     printNewRound()
