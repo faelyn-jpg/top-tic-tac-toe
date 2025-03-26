@@ -198,18 +198,41 @@ function ScreenController() {
     boardDiv.textContent = ''
 
     //get newest version of board and player
+    const board = game.getBoard()
+    const activePlayer = game.getActivePlayer()
 
     //display player's turn
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
     //render board squares/cells
-    //data attribute to identify columns/rows
+    board.forEach((row, rIndex) => {
+      row.forEach((cell, cIndex) => {
+        const cellButton = document.createElement('button')
+
+        cellButton.classList.add('cell')
+        //data attribute to identify columns/rows
+        cellButton.dataset.column = cIndex
+        cellButton.dataset.row = rIndex
+        cellButton.textContent = cell.getValue()
+        boardDiv.appendChild(cellButton)
+      })
+    })
   }
 
   function clickHandlerBoard(e) {
+    const selectedRow = e.target.dataset.row
+    const selectedColumn = e.target.dataset.column
+    if (!selectedColumn || !selectedRow) return
     //make sure column/row is clicked and not space between
+
+    game.playRound(selectedRow, selectedColumn)
+    updateScreen()
   }
+  boardDiv.addEventListener('click', clickHandlerBoard)
 
   //inital render
+  updateScreen()
 }
 
 //call screen controller
+ScreenController()
