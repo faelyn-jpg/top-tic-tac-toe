@@ -187,6 +187,9 @@ function GameController(
   }
 }
 
-const game = GameController()
+//screen controller for DOM control
+function ScreenController() {
+  const game = GameController()
+}
 
 //set game to game controller
