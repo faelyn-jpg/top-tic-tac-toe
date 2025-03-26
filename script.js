@@ -157,10 +157,16 @@ function GameController(
     //check for win
     //print for console rn
     console.log(checkWin(getActivePlayer().marker, board.getBoard()))
+    console.log(round)
     //if all cells are full and no winner, stalemate
+    const checkStalemate = (round, winStatus) => {
+      return round === 9 && winStatus == false ? true : false
+    }
     if (
-      checkWin(getActivePlayer().marker, board.getBoard()) === false &&
-      round === 9
+      checkStalemate(
+        round,
+        checkWin(getActivePlayer().marker, board.getBoard())
+      )
     ) {
       console.log('Stalemate!')
     }
@@ -182,4 +188,14 @@ function GameController(
 }
 
 const game = GameController()
+game.playRound(0, 0)
+game.playRound(0, 1)
+game.playRound(0, 2)
+game.playRound(1, 0)
+game.playRound(1, 2)
+game.playRound(1, 1)
+game.playRound(2, 1)
+game.playRound(2, 2)
+game.playRound(2, 0)
+
 //set game to game controller
