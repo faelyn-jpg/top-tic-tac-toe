@@ -19,7 +19,7 @@ function GameBoard() {
 
   //placeMarker method,
   const placeMarker = (row, column, player) => {
-    if (board[row][column].getValue() === 0) {
+    if (board[row][column].getValue() === '') {
       board[row][column].addMarker(player)
     } else {
       return
@@ -48,7 +48,7 @@ function GameBoard() {
 //Cell function
 function Cell() {
   //set base value for reach cell
-  let value = 0
+  let value = ''
   //needs to accept players marker
   const addMarker = (player) => {
     value = player
@@ -79,11 +79,11 @@ function GameController(
   const players = [
     {
       name: playerOneName,
-      marker: 1,
+      marker: 'X',
     },
     {
       name: playerTwoName,
-      marker: 2,
+      marker: 'O',
     },
   ]
   //set currently active player
@@ -159,21 +159,32 @@ function GameController(
     const checkStalemate = (round, winStatus) => {
       return round === 9 && winStatus == false ? true : false
     }
-    if (checkWin(getActivePlayer().marker, board.getBoard())) {
-      console.log(`${getActivePlayer().name} wins!`)
-    } else if (
-      checkStalemate(
-        round,
-        checkWin(getActivePlayer().marker, board.getBoard())
-      )
-    ) {
-      console.log('Stalemate!')
-    }
 
+    //checking if win or stalemate
+    const winStatus = (function getWinStatus() {
+      let message = null
+      let status = false
+      if (checkWin(getActivePlayer().marker, board.getBoard())) {
+        message = `${getActivePlayer().name} wins!`
+        status = true
+      } else if (
+        checkStalemate(
+          round,
+          checkWin(getActivePlayer().marker, board.getBoard())
+        )
+      ) {
+        message = 'Stalemate!'
+        status = true
+      }
+      return { message, status }
+    })()
     //switch who's turn it is if no winner & no stalemate
-    switchPlayerTurn()
-    //display whose turn it is
-    printNewRound()
+    if (winStatus.status === false) {
+      switchPlayerTurn()
+      //display whose turn it is
+      printNewRound()
+    }
+    return winStatus
   }
 
   //initalize game message
@@ -183,9 +194,57 @@ function GameController(
   return {
     playRound,
     getActivePlayer,
+    getBoard: board.getBoard,
   }
 }
 
-const game = GameController()
+//screen controller for DOM control
+;(function ScreenController() {
+  const game = GameController()
+  const playerTurnDiv = document.querySelector('.turn')
+  const boardDiv = document.querySelector('.board')
 
-//set game to game controller
+  const updateScreen = (winStatus) => {
+    //clear board
+    boardDiv.textContent = ''
+
+    //get newest version of board and player
+    const board = game.getBoard()
+    const activePlayer = game.getActivePlayer()
+
+    //display player's turn
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+    if (winStatus?.status !== undefined && winStatus?.status !== false) {
+      playerTurnDiv.textContent = winStatus.message
+    }
+    //render board squares/cells
+    board.forEach((row, rIndex) => {
+      row.forEach((cell, cIndex) => {
+        const cellButton = document.createElement('button')
+
+        cellButton.classList.add('cell')
+        //data attribute to identify columns/rows
+        cellButton.dataset.row = rIndex
+        cellButton.dataset.column = cIndex
+        cellButton.textContent = cell.getValue()
+        if (cellButton.textContent !== '')
+          cellButton.setAttribute('disabled', true)
+        boardDiv.appendChild(cellButton)
+      })
+    })
+  }
+
+  function clickHandlerBoard(e) {
+    const selectedRow = e.target.dataset.row
+    const selectedColumn = e.target.dataset.column
+    if (!selectedColumn || !selectedRow) return
+    //make sure column/row is clicked and not space between
+
+    const winStatus = game.playRound(selectedRow, selectedColumn)
+    updateScreen(winStatus)
+  }
+  boardDiv.addEventListener('click', clickHandlerBoard)
+
+  //inital render
+  updateScreen()
+})()
