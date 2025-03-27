@@ -159,21 +159,32 @@ function GameController(
     const checkStalemate = (round, winStatus) => {
       return round === 9 && winStatus == false ? true : false
     }
-    if (checkWin(getActivePlayer().marker, board.getBoard())) {
-      console.log(`${getActivePlayer().name} wins!`)
-    } else if (
-      checkStalemate(
-        round,
-        checkWin(getActivePlayer().marker, board.getBoard())
-      )
-    ) {
-      console.log('Stalemate!')
-    }
 
+    //checking if win or stalemate
+    const winStatus = (function getWinStatus() {
+      let message = null
+      let status = false
+      if (checkWin(getActivePlayer().marker, board.getBoard())) {
+        message = `${getActivePlayer().name} wins!`
+        status = true
+      } else if (
+        checkStalemate(
+          round,
+          checkWin(getActivePlayer().marker, board.getBoard())
+        )
+      ) {
+        message = 'Stalemate!'
+        status = true
+      }
+      return { message, status }
+    })()
     //switch who's turn it is if no winner & no stalemate
-    switchPlayerTurn()
-    //display whose turn it is
-    printNewRound()
+    if (winStatus.status === false) {
+      switchPlayerTurn()
+      //display whose turn it is
+      printNewRound()
+    }
+    return winStatus
   }
 
   //initalize game message
@@ -193,7 +204,7 @@ function ScreenController() {
   const playerTurnDiv = document.querySelector('.turn')
   const boardDiv = document.querySelector('.board')
 
-  const updateScreen = () => {
+  const updateScreen = (winStatus) => {
     //clear board
     boardDiv.textContent = ''
 
@@ -217,6 +228,9 @@ function ScreenController() {
         if (cellButton.textContent !== '0')
           cellButton.setAttribute('disabled', true)
         boardDiv.appendChild(cellButton)
+        if (winStatus?.status !== undefined && winStatus?.status !== false) {
+          playerTurnDiv.textContent = winStatus.message
+        }
       })
     })
   }
@@ -227,8 +241,8 @@ function ScreenController() {
     if (!selectedColumn || !selectedRow) return
     //make sure column/row is clicked and not space between
 
-    game.playRound(selectedRow, selectedColumn)
-    updateScreen()
+    const winStatus = game.playRound(selectedRow, selectedColumn)
+    updateScreen(winStatus)
   }
   boardDiv.addEventListener('click', clickHandlerBoard)
 
