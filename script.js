@@ -19,7 +19,7 @@ function GameBoard() {
 
   //placeMarker method,
   const placeMarker = (row, column, player) => {
-    if (board[row][column].getValue() === 0) {
+    if (board[row][column].getValue() === '') {
       board[row][column].addMarker(player)
     } else {
       return
@@ -48,7 +48,7 @@ function GameBoard() {
 //Cell function
 function Cell() {
   //set base value for reach cell
-  let value = 0
+  let value = ''
   //needs to accept players marker
   const addMarker = (player) => {
     value = player
@@ -79,11 +79,11 @@ function GameController(
   const players = [
     {
       name: playerOneName,
-      marker: 1,
+      marker: 'X',
     },
     {
       name: playerTwoName,
-      marker: 2,
+      marker: 'O',
     },
   ]
   //set currently active player
@@ -199,7 +199,7 @@ function GameController(
 }
 
 //screen controller for DOM control
-function ScreenController() {
+;(function ScreenController() {
   const game = GameController()
   const playerTurnDiv = document.querySelector('.turn')
   const boardDiv = document.querySelector('.board')
@@ -227,7 +227,7 @@ function ScreenController() {
         cellButton.dataset.row = rIndex
         cellButton.dataset.column = cIndex
         cellButton.textContent = cell.getValue()
-        if (cellButton.textContent !== '0')
+        if (cellButton.textContent !== '')
           cellButton.setAttribute('disabled', true)
         boardDiv.appendChild(cellButton)
       })
@@ -247,7 +247,4 @@ function ScreenController() {
 
   //inital render
   updateScreen()
-}
-
-//call screen controller
-ScreenController()
+})()
