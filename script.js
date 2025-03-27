@@ -214,6 +214,8 @@ function ScreenController() {
         cellButton.dataset.row = rIndex
         cellButton.dataset.column = cIndex
         cellButton.textContent = cell.getValue()
+        if (cellButton.textContent !== '0')
+          cellButton.setAttribute('disabled', true)
         boardDiv.appendChild(cellButton)
       })
     })
@@ -226,13 +228,6 @@ function ScreenController() {
     //make sure column/row is clicked and not space between
 
     game.playRound(selectedRow, selectedColumn)
-
-    //grab specific button clicked to disable after use
-    console.log(
-      document.querySelector(
-        `.cell[data-row="${selectedRow}"][data-column="${selectedColumn}"]`
-      )
-    )
     updateScreen()
   }
   boardDiv.addEventListener('click', clickHandlerBoard)
