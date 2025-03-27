@@ -214,7 +214,9 @@ function ScreenController() {
 
     //display player's turn
     playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
-
+    if (winStatus?.status !== undefined && winStatus?.status !== false) {
+      playerTurnDiv.textContent = winStatus.message
+    }
     //render board squares/cells
     board.forEach((row, rIndex) => {
       row.forEach((cell, cIndex) => {
@@ -228,9 +230,6 @@ function ScreenController() {
         if (cellButton.textContent !== '0')
           cellButton.setAttribute('disabled', true)
         boardDiv.appendChild(cellButton)
-        if (winStatus?.status !== undefined && winStatus?.status !== false) {
-          playerTurnDiv.textContent = winStatus.message
-        }
       })
     })
   }
