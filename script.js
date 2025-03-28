@@ -76,12 +76,12 @@ function GameController() {
   const players = [
     {
       player: 'p1',
-      name: 'Player One',
+      name: 'X Player',
       marker: 'X',
     },
     {
       player: 'p2',
-      name: 'Player Two',
+      name: 'O Player',
       marker: 'O',
     },
   ]
