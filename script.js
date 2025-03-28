@@ -65,10 +65,7 @@ function Cell() {
 
 //game controller object
 //define player names
-function GameController(
-  playerOneName = 'Player One',
-  playerTwoName = 'Player Two'
-) {
+function GameController() {
   //define board
   const board = GameBoard()
 
@@ -78,20 +75,30 @@ function GameController(
   //player objects in array
   const players = [
     {
-      name: playerOneName,
+      player: 'p1',
+      name: 'Player One',
       marker: 'X',
     },
     {
-      name: playerTwoName,
+      player: 'p2',
+      name: 'Player Two',
       marker: 'O',
     },
   ]
+  console.log(players)
   //set currently active player
+
+  //set name of players
+  const setPlayerName = (player, newName) => {
+    const settingName = players.find((obj) => {
+      return obj.player === player
+    })
+    settingName.name = newName
+  }
 
   let activePlayer = players[0]
 
   //need to be able to switch players
-
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0]
   }
@@ -192,6 +199,7 @@ function GameController(
 
   //gamecontroller returns ability to play round and see who the active player is
   return {
+    setPlayerName,
     playRound,
     getActivePlayer,
     getBoard: board.getBoard,
@@ -203,10 +211,12 @@ function GameController(
   const game = GameController()
   const playerTurnDiv = document.querySelector('.turn')
   const boardDiv = document.querySelector('.board')
+  const nameForm = document.querySelector('form')
 
   const updateScreen = (winStatus) => {
     //clear board
     boardDiv.textContent = ''
+    playerTurnDiv.textContent = ''
 
     //get newest version of board and player
     const board = game.getBoard()
@@ -234,6 +244,13 @@ function GameController(
     })
   }
 
+  function changeHandler(e) {
+    const selectedPlayer = e.target.id
+    const nameChanged = e.target.value
+    game.setPlayerName(selectedPlayer, nameChanged)
+    updateScreen()
+  }
+
   function clickHandlerBoard(e) {
     const selectedRow = e.target.dataset.row
     const selectedColumn = e.target.dataset.column
@@ -244,7 +261,7 @@ function GameController(
     updateScreen(winStatus)
   }
   boardDiv.addEventListener('click', clickHandlerBoard)
-
+  nameForm.addEventListener('change', changeHandler)
   //inital render
   updateScreen()
 })()
