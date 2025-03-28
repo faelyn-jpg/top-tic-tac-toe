@@ -68,16 +68,17 @@ h6 {
 
 .header {
   background-color: rgb(163, 163, 189);
+  min-height: 60px;
 }
-.main {
-}
+
 .footer {
   background-color: rgb(199, 199, 159);
+  min-height: 60px;
 }
 
 .container {
   background-color: rgb(223, 191, 191);
-  min-height: 90vh;
+  min-height: 88vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,13 +86,47 @@ h6 {
 }
 .turn {
   background-color: azure;
+  justify-content: center;
+  align-items: center;
   display: flex;
+  font-size: x-large;
   min-height: 100px;
-  min-width: 200px;
+  min-width: 350px;
+  border-radius: 15px;
 }
 .board {
-  background-color: bisque;
-  display: flex;
-  min-height: 200px;
-  min-width: 300px;
+  background-color: black;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 5px;
+  border: 5px solid black;
+}
+.cell {
+  height: 175px;
+  width: 175px;
+  border-radius: 0;
+  font-size: xx-large;
+}
+.cell:hover {
+  background-color: lightblue;
+}
+
+.cell:disabled {
+  background-color: white;
+  border: solid black;
+  color: black;
+}
+.cell:disabled:hover {
+  background-color: white;
+}
+
+form {
+  background-color: white;
+  min-width: 350px;
+}
+form p {
+  display: grid;
+  font-size: large;
+  grid-template-columns: 1fr 2fr;
 }
