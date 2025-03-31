@@ -53,13 +53,17 @@ function GameController() {
       player: 'p1',
       name: 'X Player',
       marker: 'X',
+      wins: 0,
     },
     {
       player: 'p2',
       name: 'O Player',
       marker: 'O',
+      wins: 0,
     },
   ]
+
+  const getPlayers = () => players
 
   const setPlayerName = (player, newName) => {
     const settingName = players.find((obj) => {
@@ -120,6 +124,7 @@ function GameController() {
       let status = false
       if (checkWin(getActivePlayer().marker, board.getBoard())) {
         message = `${getActivePlayer().name} wins!`
+        getActivePlayer().wins++
         status = true
       } else if (
         checkStalemate(
@@ -145,6 +150,7 @@ function GameController() {
   }
 
   return {
+    getPlayers,
     setPlayerName,
     playRound,
     getActivePlayer,
@@ -159,14 +165,29 @@ function GameController() {
   const boardDiv = document.querySelector('.board')
   const nameForm = document.querySelector('form')
   const control = document.querySelector('.control')
+  const p1Name = document.querySelector('.p1-name')
+  const p2Name = document.querySelector('.p2-name')
+  const p1Wins = document.querySelector('.p1-wins')
+  const p2Wins = document.querySelector('.p2-wins')
+
   let gameStartedToggle = false
 
   const updateScreen = (winStatus) => {
     boardDiv.textContent = ''
     playerTurnDiv.textContent = ''
+    p1Name.textContent = ''
+    p2Name.textContent = ''
+    p1Wins.textContent = ''
+    p2Wins.textContent = ''
 
     const board = game.getBoard()
     const activePlayer = game.getActivePlayer()
+    const players = game.getPlayers()
+
+    p1Name.textContent = players[0].name
+    p2Name.textContent = players[1].name
+    p1Wins.textContent = players[0].wins
+    p2Wins.textContent = players[1].wins
 
     if (gameStartedToggle === false) {
       playerTurnDiv.textContent = 'Press Start to play!'
