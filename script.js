@@ -186,8 +186,10 @@ function GameController() {
 
     p1Name.textContent = players[0].name
     p2Name.textContent = players[1].name
-    p1Wins.textContent = players[0].wins
-    p2Wins.textContent = players[1].wins
+    p1Wins.textContent =
+      players[0].wins + (players[0].wins === 1 ? ' Win' : ' Wins')
+    p2Wins.textContent =
+      players[1].wins + (players[1].wins === 1 ? ' Win' : ' Wins')
 
     if (gameStartedToggle === false) {
       playerTurnDiv.textContent = 'Press Start to play!'

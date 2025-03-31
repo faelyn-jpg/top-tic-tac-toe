@@ -83,6 +83,7 @@ h6 {
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  grid-row: 1 / span 3;
 }
 .turn {
   background-color: azure;
@@ -129,4 +130,27 @@ form p {
   display: grid;
   font-size: large;
   grid-template-columns: 1fr 2fr;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  background-color: rgb(223, 191, 191);
+}
+
+.left,
+.right {
+  grid-row: 1/2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: xx-large;
+}
+
+.left > p,
+.right > p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
