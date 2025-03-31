@@ -175,21 +175,24 @@ function GameController() {
   const updateScreen = (winStatus) => {
     boardDiv.textContent = ''
     playerTurnDiv.textContent = ''
-    p1Name.textContent = ''
-    p2Name.textContent = ''
-    p1Wins.textContent = ''
-    p2Wins.textContent = ''
 
     const board = game.getBoard()
     const activePlayer = game.getActivePlayer()
     const players = game.getPlayers()
 
-    p1Name.textContent = players[0].name
-    p2Name.textContent = players[1].name
-    p1Wins.textContent =
-      players[0].wins + (players[0].wins === 1 ? ' Win' : ' Wins')
-    p2Wins.textContent =
-      players[1].wins + (players[1].wins === 1 ? ' Win' : ' Wins')
+    const updatePlayerScore = (p, player) => {
+      const playerName = document.querySelector(`.${p}-name`)
+      const playerWins = document.querySelector(`.${p}-wins`)
+      playerName.textContent = ''
+      playerWins.textContent = ''
+
+      playerName.textContent = player.name
+      playerWins.textContent =
+        player.wins + (player.wins === 1 ? ' Win' : ' Wins')
+    }
+
+    updatePlayerScore(players[0].player, players[0])
+    updatePlayerScore(players[1].player, players[1])
 
     if (gameStartedToggle === false) {
       playerTurnDiv.textContent = 'Press Start to play!'
