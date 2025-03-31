@@ -36,7 +36,10 @@ function GameBoard() {
     console.log(boardWithCellValues)
   }
 
-  return { getBoard, placeMarker, printBoard }
+  const resetBoard = () => {
+    board.map((row) => row.map((cell) => cell.resetMarker()))
+  }
+  return { getBoard, placeMarker, printBoard, resetBoard }
 }
 
 //return methods to be used
@@ -56,8 +59,12 @@ function Cell() {
   //needs to get value of cell to return
   const getValue = () => value
 
+  const resetMarker = () => {
+    value = ''
+  }
   //return token and value
   return {
+    resetMarker,
     addMarker,
     getValue,
   }
@@ -194,6 +201,12 @@ function GameController() {
     return winStatus
   }
 
+  const resetGame = () => {
+    board.resetBoard()
+    round = 0
+    switchPlayerTurn()
+  }
+
   //initalize game message
   printNewRound()
 
@@ -203,6 +216,7 @@ function GameController() {
     playRound,
     getActivePlayer,
     getBoard: board.getBoard,
+    resetGame,
   }
 }
 
@@ -212,6 +226,8 @@ function GameController() {
   const playerTurnDiv = document.querySelector('.turn')
   const boardDiv = document.querySelector('.board')
   const nameForm = document.querySelector('form')
+  const control = document.querySelector('.control')
+  let gameStartedToggle = false
 
   const updateScreen = (winStatus) => {
     //clear board
@@ -222,12 +238,22 @@ function GameController() {
     const board = game.getBoard()
     const activePlayer = game.getActivePlayer()
 
-    //display player's turn
-    playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+    //display player's turn or start message/button
+    if (gameStartedToggle === false) {
+      playerTurnDiv.textContent = 'Press Start to play!'
+    } else {
+      playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+      control.setAttribute('disabled', true)
+    }
+
+    //check for win to change DOM
     if (winStatus?.status !== undefined && winStatus?.status !== false) {
       playerTurnDiv.textContent = winStatus.message
+      gameStartedToggle = !gameStartedToggle
+      control.removeAttribute('disabled')
     }
     //render board squares/cells
+
     board.forEach((row, rIndex) => {
       row.forEach((cell, cIndex) => {
         const cellButton = document.createElement('button')
@@ -237,11 +263,27 @@ function GameController() {
         cellButton.dataset.row = rIndex
         cellButton.dataset.column = cIndex
         cellButton.textContent = cell.getValue()
-        if (cellButton.textContent !== '')
-          cellButton.setAttribute('disabled', true)
+        cellButton.textContent !== '' || gameStartedToggle === false
+          ? cellButton.setAttribute('disabled', true)
+          : cellButton.removeAttribute('disabled')
         boardDiv.appendChild(cellButton)
       })
     })
+
+    //check button for rerendering
+    if (gameStartedToggle === true) control.textContent = 'Reset'
+  }
+
+  function clickHandlerStart(e) {
+    if (control.textContent === 'Reset') {
+      game.resetGame()
+    }
+
+    gameStartedToggle === false
+      ? (gameStartedToggle = true)
+      : (gameStartedToggle = false)
+
+    updateScreen()
   }
 
   function changeHandler(e) {
@@ -260,6 +302,8 @@ function GameController() {
     const winStatus = game.playRound(selectedRow, selectedColumn)
     updateScreen(winStatus)
   }
+
+  control.addEventListener('click', clickHandlerStart)
   boardDiv.addEventListener('click', clickHandlerBoard)
   nameForm.addEventListener('change', changeHandler)
   //inital render
