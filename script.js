@@ -170,7 +170,9 @@ function GameController() {
 
   const updateScreen = (winStatus) => {
     boardDiv.textContent = ''
-    playerTurnDiv.textContent = ''
+    if (winStatus !== undefined && gameStartedToggle !== false) {
+      playerTurnDiv.textContent = ''
+    }
 
     const board = game.getBoard()
     const activePlayer = game.getActivePlayer()
@@ -190,12 +192,12 @@ function GameController() {
     updatePlayerScore(players[0].player, players[0])
     updatePlayerScore(players[1].player, players[1])
 
-    if (gameStartedToggle === false) {
-      playerTurnDiv.textContent = 'Press Start to play!'
-    } else {
+    if (gameStartedToggle !== false) {
       control.textContent = 'Reset'
       playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
       control.setAttribute('disabled', true)
+    } else if (gameStartedToggle === false && control.textContent === 'Start') {
+      playerTurnDiv.textContent = 'Press Start to play!'
     }
 
     if (winStatus?.status !== undefined && winStatus?.status !== false) {
@@ -219,10 +221,11 @@ function GameController() {
         boardDiv.appendChild(cellButton)
       })
     })
+    return { updatePlayerScore }
   }
 
   function clickHandlerStart(e) {
-    if (control.textContent === 'Reset') {
+    if (gameStartedToggle === false) {
       game.resetGame()
     }
 
