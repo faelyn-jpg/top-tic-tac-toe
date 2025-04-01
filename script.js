@@ -165,10 +165,6 @@ function GameController() {
   const boardDiv = document.querySelector('.board')
   const nameForm = document.querySelector('form')
   const control = document.querySelector('.control')
-  const p1Name = document.querySelector('.p1-name')
-  const p2Name = document.querySelector('.p2-name')
-  const p1Wins = document.querySelector('.p1-wins')
-  const p2Wins = document.querySelector('.p2-wins')
 
   let gameStartedToggle = false
 
