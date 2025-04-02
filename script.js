@@ -51,14 +51,14 @@ function GameController() {
   const players = [
     {
       player: 'p1',
-      name: 'X Player',
-      marker: 'X',
+      name: '☠️ Player',
+      marker: '☠️',
       wins: 0,
     },
     {
       player: 'p2',
-      name: 'O Player',
-      marker: 'O',
+      name: '🔥 Player',
+      marker: '🔥',
       wins: 0,
     },
   ]
@@ -224,7 +224,7 @@ function GameController() {
     return { updatePlayerScore }
   }
 
-  function clickHandlerStart(e) {
+  function clickHandlerStart() {
     if (gameStartedToggle === false) {
       game.resetGame()
     }
